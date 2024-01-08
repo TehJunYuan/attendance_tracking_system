@@ -12,18 +12,10 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-
-    <!-- Instascan -->
-    <script src="{{ asset('assets/js/instascan.min.js')}}"></script>
 
     {{-- Bootstrao Styles --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     
-        <!--toastr-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
-    @yield('styles')
     @livewireStyles
 </head>
 <body>
@@ -32,26 +24,23 @@
             <div class="container">
                 @guest
                 
-                <a class="navbar-brand" href="{{ url('/') }}">
+                @else
+                @if (Auth::user()->role==1)
+                    <a class="navbar-brand" href="{{ route('admin.home') }}">
+                        Attendance Tracking System
+                    </a>
+                @elseif (Auth::user()->role==2)
+
+                <a class="navbar-brand" href="{{ route('lecture.home') }}">
                     Attendance Tracking System
                 </a>
+
                 @else
-                    @if (Auth::user()->role==1)
-                        <a class="navbar-brand" href="{{ route('admin.home') }}">
-                            Attendance Tracking System
-                        </a>
-                    @elseif (Auth::user()->role==2)
-
-                    <a class="navbar-brand" href="{{ route('lecture.home') }}">
-                        Attendance Tracking System
-                    </a>
-
-                    @else
-                    <a class="navbar-brand" href="{{ route('student.home') }}">
-                        Attendance Tracking System
-                    </a>
-                        
-                    @endif
+                <a class="navbar-brand" href="{{ route('student.home') }}">
+                    Attendance Tracking System
+                </a>
+                    
+                @endif
                 @endguest
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -118,16 +107,16 @@
         </nav>
 
         <main class="py-4">
-            @yield('content')
+            {{ $slot }}
         </main>
     </div>
+
         {{-- Bootstrap Scripts --}}
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"></script>
-
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        @yield('scripts')
+    
+        @stack('scripts')
         @livewireScripts
 </body>
 </html>
